@@ -1,3 +1,0 @@
-/home/ami/Documents/projekty/build/CMakeFiles/giera.dir
-/home/ami/Documents/projekty/build/CMakeFiles/edit_cache.dir
-/home/ami/Documents/projekty/build/CMakeFiles/rebuild_cache.dir
