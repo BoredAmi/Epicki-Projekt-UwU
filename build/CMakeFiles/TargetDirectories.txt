@@ -1,3 +1,0 @@
-/home/ami/infa/projekt_psio/Epicki-Projekt-UwU/build/CMakeFiles/giera.dir
-/home/ami/infa/projekt_psio/Epicki-Projekt-UwU/build/CMakeFiles/edit_cache.dir
-/home/ami/infa/projekt_psio/Epicki-Projekt-UwU/build/CMakeFiles/rebuild_cache.dir
