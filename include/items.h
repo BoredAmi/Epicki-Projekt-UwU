@@ -6,6 +6,7 @@
 enum tools{pickaxe,sheers,bucket,shovel};
 enum material{copper,iron,diamond};
 enum animal_material{milk,wool};
+enum spawnable_item{truffle,egg};
 class item
 {
 public:
