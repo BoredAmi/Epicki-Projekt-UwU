@@ -28,10 +28,10 @@ class harv_crit:public critter
 {
 public:
     bool harvest_from_animal(tools current_tool,int now_time);
-    harv_crit(int x, int y,int hp,int reset_time,drop drop_type, tools correct_tool, animal_material harv_mat);
+    harv_crit(int x, int y,int hp,int reset_time,drop drop_type, tools correct_tool, materials* harv_mat);
     virtual~harv_crit();
 protected:
-    animal_material harv_mat;
+    materials* harv_mat;
     tools correct_tool;
 };
 class cow:public harv_crit
@@ -51,10 +51,11 @@ class non_harv_crit:public critter
 {
 public:
     bool spawn_item(int time_now);
-    non_harv_crit(int x, int y,int hp,int reset_time,drop drop_type,spawnable_item item);
+    //spawnable item as item in imtems.h must be changed!!!!
+    non_harv_crit(int x, int y,int hp,int reset_time,drop drop_type,food* item);
     ~non_harv_crit();
 protected:
-    spawnable_item item;
+    food* item;
 };
 class chicken:public non_harv_crit
 {
