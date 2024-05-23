@@ -44,8 +44,6 @@ public:
     bool cut_down(tools tool);
     cutable(int x,int y,int time_now,int growth_length);
     virtual~cutable();
-protected:
-    tools correct_tool=scythe;
 };
 class wheat
 {
