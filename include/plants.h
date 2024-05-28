@@ -2,8 +2,9 @@
 #define plants_h
 #include "plants.h"
 #include "items.h"
+#include "gathering.h"
 enum growth_stages{freshly_planted,growing,ready};
-class plant
+class plant:public entity
 {
 public:
     void water();
@@ -12,8 +13,6 @@ public:
 protected:
     growth_stages current_stage;
     bool watered;
-    int x;
-    int y;
     int growth_start;
     int growth_length;
 };

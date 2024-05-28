@@ -6,21 +6,10 @@
 #include <vector>
 #include "critter.h"
 #include "plants.h"
+#include  "player.h"
+#include "world.h"
 
-class eq
-{
-public:
-    void change_item(int slot);
-    bool addItem(item* Item);
-    bool removeItem(int chosen_item);
 
-    eq();
-    ~eq();
-private:
-    std::vector<item*> items;
-    int chosen_item;
-    int max_capacity;
-};
 class item
 {
 public:
@@ -38,11 +27,12 @@ class tools:public item
 public:
     tools(int id,int quant);
     virtual ~tools();
+    int durability;
 };
 class sheers:public tools
 {
 public:
-    bool cut_wool(sheep she);
+    bool cut_wool(sheep& she,Player& player);
     sheers(int id,int quant=1);
     ~sheers();
 };
@@ -50,7 +40,7 @@ public:
 class bucket:public tools
 {
 public:
-    bool milk_cow(cow muu);
+    bool milk_cow(cow& muu,Player& player);
     bucket(int id,int quant=1);
     ~bucket();
 };
@@ -63,10 +53,18 @@ public:
 protected:
     int range;
 };
+class hoe:public tools
+{
+public:
+    bool till(tiles& tile);
+    hoe(int id,int quant=1);
+    ~hoe();
+};
 //food items
 class food:public item
 {
 public:
+    void eat(Player& player);
     food(int id,int quant);
     virtual ~food();
 protected:
@@ -74,6 +72,7 @@ protected:
 };
 class milk:public food
 {
+public:
     milk(int id,int quant);
     ~milk();
 };

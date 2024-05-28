@@ -1,42 +1,7 @@
 #include "items.h"
 //eq functions
 //change chosen slot to use from eq
-void eq::change_item(int slot)
-{
-    chosen_item=slot;
-}
-//add item to the vector
-bool eq::addItem(item* Item)
-{
-    if(items.size()>max_capacity)
-    {
-        items.push_back( Item);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//removes item from vector
-bool eq::removeItem(int chosen_item)
-{
-    for(auto it =items.begin();it != items.end();++it)
-    {
-        if((*it)->getId()==chosen_item)
-        {
-            delete *it;
-            items.erase(it);
-            return true;
-        }
-    }
-    return false;
-}
-eq::~eq() {
-    for (auto item : items) {
-        delete item;
-    }
-}
+
 //item functions
 item::item(int id,int quant):id(id),quant(quant){}
 item::~item(){}
@@ -45,18 +10,76 @@ tools::tools(int id,int quant):item(id,quant){}
 tools::~tools(){}
 sheers::sheers(int id,int quant): tools(id,quant){}
 sheers::~sheers(){}
+bool sheers::cut_wool(sheep& she,Player& player)
+{
+    if(she.collected_today==false)
+    {
+        wool* Wool=new wool(1,1);
+        player.addItem(Wool);
+        durability--;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 bucket::bucket(int id,int quant):tools(id,quant){}
 bucket::~bucket(){}
+bool bucket::milk_cow(cow& muu,Player& player)
+{
+    if(muu.collected_today==false)
+    {
+        milk* Milk=new milk(0,1);
+        player.addItem(Milk);
+        quant--;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 scythe::scythe(int id,int quant):tools(id,quant){}
 scythe::~scythe(){}
+hoe::hoe(int id,int quant):tools(id,quant){}
+hoe::~hoe(){}
+bool hoe::till(tiles& tile)
+{
+    if(tile.tile_type==land)
+    {
+        tile.change_type(plowed);
+        durability--;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//food functions
 food::food(int id,int quant):item(id,quant){}
 food::~food(){}
+
+void food::eat(Player& player)
+{
+    player.energy+=hunger_restore;
+    if(quant=1)
+    {
+        player.removeItem(id);
+    }
+    else if(quant>1)
+    {
+        quant--;
+    }
+}
 milk::milk(int id,int quant):food(id,quant){}
 milk::~milk(){}
 truffle::truffle(int id,int quant):food(id,quant){}
 truffle::~truffle(){}
 egg::egg(int id,int quant):food(id,quant){}
 egg::~egg(){}
+//materials functions
 materials::materials(int id,int quant):item(id,quant){}
 materials::~materials(){}
 wood::wood(int id,int quant):materials(id,quant){}

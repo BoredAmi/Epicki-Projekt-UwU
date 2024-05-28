@@ -3,9 +3,9 @@
 
 #include <iostream>
 #include "items.h"
-enum drop{beef,lamb,pork,chicken_m};
+#include "gathering.h"
 
-class critter
+class critter:public entity
 {
 public:
     int getX() const;
@@ -14,25 +14,20 @@ public:
     bool take_dmg(int dmg);
     void move(int worldWidth, int worldHeight);
     void setPosition(int x, int y);
-    critter(int x, int y,int hp,int reset_time,drop drop_type);
+    critter(int x, int y,int hp);
     virtual ~critter();
 protected:
-    int x;
-    int y;
-    int hp;
-    int reset_time;
-    int last_time;
-    drop drop_type;
+
 };
 class harv_crit:public critter
 {
 public:
     bool harvest_from_animal(tools current_tool,int now_time);
-    harv_crit(int x, int y,int hp,int reset_time,drop drop_type, tools correct_tool, materials* harv_mat);
+    harv_crit(int x, int y,int hp);
     virtual~harv_crit();
+    bool collected_today;
 protected:
-    materials* harv_mat;
-    tools correct_tool;
+    
 };
 class cow:public harv_crit
 {
@@ -50,9 +45,8 @@ public:
 class non_harv_crit:public critter
 {
 public:
-    bool spawn_item(int time_now);
     //spawnable item as item in imtems.h must be changed!!!!
-    non_harv_crit(int x, int y,int hp,int reset_time,drop drop_type,food* item);
+    non_harv_crit(int x, int y,int hp);
     ~non_harv_crit();
 protected:
     food* item;
