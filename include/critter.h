@@ -14,7 +14,7 @@ public:
     bool take_dmg(int dmg);
     void move(int worldWidth, int worldHeight);
     void setPosition(int x, int y);
-    int mleko;
+
     critter(int x, int y,int hp);
     virtual ~critter();
 protected:
