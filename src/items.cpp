@@ -5,6 +5,10 @@
 //item functions
 item::item(int id,int quant):id(id),quant(quant){}
 item::~item(){}
+int item::getId()
+{
+    return id;
+}
 //tools functions
 tools::tools(int id,int quant):item(id,quant){}
 tools::~tools(){}
@@ -61,22 +65,9 @@ bool hoe::till(tiles& tile)
 food::food(int id,int quant):item(id,quant){}
 food::~food(){}
 
-void food::eat(Player& player)
-{
-    player.energy+=hunger_restore;
-    if(quant=1)
-    {
-        player.removeItem(id);
-    }
-    else if(quant>1)
-    {
-        quant--;
-    }
-}
 milk::milk(int id,int quant):food(id,quant){}
 milk::~milk(){}
-truffle::truffle(int id,int quant):food(id,quant){}
-truffle::~truffle(){}
+
 egg::egg(int id,int quant):food(id,quant){}
 egg::~egg(){}
 //materials functions

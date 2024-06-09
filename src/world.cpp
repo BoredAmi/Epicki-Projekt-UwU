@@ -14,17 +14,19 @@ std::vector<std::vector<tiles>> generateWorld(int width, int height, const Perli
             double ny = static_cast<double>(y);
             double elevation = noise.noise(nx, ny);
 
-            if (elevation < 0.5) {s
+            if (elevation < 0.5) {
                 world[x][y] = tiles(tile_types::water);
-            } else {
+            } 
+            else 
+            {
                 world[x][y] = tiles(tile_types::land);
                 int spawn = dis(gen);
                 if (spawn <= 10) {
                     // Spawn a boulder
-                    world[x][y].addEntity(std::make_unique<boulder>());
+
                 } else if (spawn <= 20) {
                     // Spawn a tree
-                    world[x][y].addEntity(std::make_unique<tree>());
+
                 }
             }
         }
@@ -40,7 +42,12 @@ bool tiles::change_type(tile_types type) {
     tile_type = type;
     return true;
 }
-
+void tiles::change_occupation() {
+    occupation = !occupation;
+}
+void tiles::addEntity(std::unique_ptr<entity> entity) {
+    ;
+}
 World::World(int width, int height) : width(width), height(height), grid(generateWorld(width, height, PerlinNoise())) {}
 
 void World::addAnimal(std::shared_ptr<critter> animal) {

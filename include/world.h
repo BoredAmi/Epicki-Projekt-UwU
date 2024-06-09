@@ -6,14 +6,18 @@
 #include "critter.h"
 #include "perlin.h"
 enum tile_types { land, plowed, water };
-
+class critter;
 class tiles {
 public:
     tile_types tile_type;
-    bool occupation; // 0 for empty, 1 for occupied 
+    void change_occupation();
     bool change_type(tile_types type);
+    void addEntity(std::unique_ptr<entity> entity);
     tiles(tile_types type);   
     ~tiles();
+    bool occupation; // 0 for empty, 1 for occupied 
+private:
+    
 };
 
 class World {

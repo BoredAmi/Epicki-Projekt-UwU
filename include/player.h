@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "items.h"
 enum direction {UP, DOWN, LEFT, RIGHT};
+class item;
 class Player {
 public:
     void change_item(int slot);

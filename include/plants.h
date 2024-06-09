@@ -1,14 +1,14 @@
 #ifndef plants_h
 #define plants_h
-#include "plants.h"
 #include "items.h"
-#include "gathering.h"
+#include "entity.h"
 enum growth_stages{freshly_planted,growing,ready};
+class entity;
 class plant:public entity
 {
 public:
     void water();
-    plant(int x,int y,int time_now,int growth_length);
+    plant(int x,int y);
     virtual ~plant();
 protected:
     growth_stages current_stage;
@@ -20,28 +20,27 @@ class pickupable:public plant
 {
 public:
     bool pickup();
-    pickupable(int x,int y,int time_now,int growth_length);
+    pickupable(int x,int y);
     virtual ~pickupable();
 };
 
 class carrot:public pickupable
 {
 public:
-    carrot(int x,int y,int time_now,int growth_length);
+    carrot(int x,int y);
     ~carrot();
 };
 class potato:public pickupable
 {
 public:
-    potato(int x,int y,int time_now,int growth_length);
+    potato(int x,int y);
     ~potato();
 };
 
-class cutable
+class cutable:public plant
 {
 public:
-    bool cut_down(tools tool);
-    cutable(int x,int y,int time_now,int growth_length);
+    cutable(int x,int y);
     virtual~cutable();
 };
 class wheat
@@ -50,17 +49,6 @@ public:
     wheat(/* args */);
     ~wheat();
 };
-
-class hemp:public cutable
-{
-public:
-    hemp(int x,int y,int time_now,int growth_length);
-    ~hemp();
-};
-
-
-
-
 
 
 

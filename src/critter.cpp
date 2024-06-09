@@ -6,19 +6,6 @@ critter::critter(int x, int y,int hp) : entity(x,y,hp){}
 critter::~critter() {
     std::cout << "Animal at (" << x << ", " << y << ") destroyed.\n";
 }
-//get x coridnate
-int critter::getX() const {
-    return x;
-}
-//get y cordinate
-int critter::getY() const {
-    return y;
-}
-//set new cordinates
-void critter::setPosition(int x, int y) {
-    this->x = x;
-    this->y = y;
-}
 //randomly chose the direction and set new cordiantes
 void critter::move(int worldWidth, int worldHeight) {
     int direction = std::rand() % 4;

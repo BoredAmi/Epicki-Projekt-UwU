@@ -6,9 +6,12 @@
 #include <vector>
 #include "critter.h"
 #include "plants.h"
-#include  "player.h"
 #include "world.h"
-
+#include "player.h"
+class Player;
+class sheep;
+class cow;
+class tiles;
 
 class item
 {
@@ -64,7 +67,6 @@ public:
 class food:public item
 {
 public:
-    void eat(Player& player);
     food(int id,int quant);
     virtual ~food();
 protected:
@@ -75,12 +77,6 @@ class milk:public food
 public:
     milk(int id,int quant);
     ~milk();
-};
-class truffle:public food
-{
-public:
-    truffle(int id,int quant);
-    ~truffle();
 };
 class egg:public food
 {

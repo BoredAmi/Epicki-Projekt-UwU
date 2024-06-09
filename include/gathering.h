@@ -1,21 +1,7 @@
 #ifndef gathering_h
 #define gathering_h
 #include "items.h"
-#include "world.h"
-#include "player.h"
-class entity
-{
-public:
-    int getX() const;
-    int getY() const;
-    void setPosition(int x, int y);
-    entity(int x, int y,int hp);
-    virtual ~entity();
-protected:
-    int x;
-    int y;
-    int hp;
-};
+#include "plants.h"
 
 class rock:public entity
 {
