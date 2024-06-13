@@ -2,32 +2,38 @@
 #include "gathering.h"
 #include <random>
 
-std::vector<std::vector<tiles>> generateWorld(int width, int height, const PerlinNoise& noise) {
+std::vector<std::vector<tiles>> generateWorld(int width, int height, SimplexNoise& noise) {
     std::vector<std::vector<tiles>> world(width, std::vector<tiles>(height, tiles(tile_types::land)));
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1, 100);
 
-    for (int x = 0; x < width; ++x) {
-        for (int y = 0; y < height; ++y) {
-            double nx = static_cast<double>(x);
-            double ny = static_cast<double>(y);
-            double elevation = noise.noise(nx, ny);
-
-            if (elevation < 0.5) {
-                world[x][y] = tiles(tile_types::water);
-            } 
-            else 
-            {
-                world[x][y] = tiles(tile_types::land);
-                int spawn = dis(gen);
-                if (spawn <= 10) {
-                    // Spawn a boulder
-
-                } else if (spawn <= 20) {
-                    // Spawn a tree
-
-                }
+    // Generate water values
+    std::vector<std::vector<double>> waterGrid(width, std::vector<double>(height));
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            double nx = static_cast<double>(x) / width - 0.5;
+            double ny = static_cast<double>(y) / height - 0.5;
+            waterGrid[x][y] = noise.noise(nx, ny);
+        }
+    }
+    // Generate land values
+    std::vector<std::vector<double>> landGrid(width, std::vector<double>(height));
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            double nx = static_cast<double>(x) / width - 0.5;
+            double ny = static_cast<double>(y) / height - 0.5;
+            landGrid[x][y] = noise.noise(nx, ny);
+        }
+    }
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) 
+        {
+            if (waterGrid[x][y] < 0) {
+                world[x][y].change_type(tile_types::water);
+                
+            } else {
+                world[x][y].change_type(tile_types::land);
             }
         }
     }
@@ -48,7 +54,9 @@ void tiles::change_occupation() {
 void tiles::addEntity(std::unique_ptr<entity> entity) {
     ;
 }
-World::World(int width, int height) : width(width), height(height), grid(generateWorld(width, height, PerlinNoise())) {}
+World::World(int width, int height) : width(width), height(height) {
+    SimplexNoise noise;
+    grid = generateWorld(width, height, noise);}
 
 void World::addAnimal(std::shared_ptr<critter> animal) {
     animals.push_back(animal);
@@ -69,7 +77,7 @@ void World::update() {
             grid[oldY][oldX].occupation = 0;
             grid[newY][newX].occupation = 1;
         } else {
-            animal->setPosition(oldX, oldY); // Revert move if new position is occupied
+
         }
     }
 }

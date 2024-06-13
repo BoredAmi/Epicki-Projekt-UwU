@@ -34,5 +34,5 @@ protected:
     
     std::vector<std::shared_ptr<critter>> animals;
 };
-std::vector<std::vector<tiles>> generateWorld(int width, int height, const PerlinNoise& noise);
+std::vector<std::vector<tiles>> generateWorld(int width, int height, SimplexNoise& noise);
 #endif
