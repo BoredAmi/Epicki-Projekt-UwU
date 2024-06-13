@@ -1,55 +1,39 @@
-#ifndef plants_h
-#define plants_h
-#include "items.h"
-#include "entity.h"
-enum growth_stages{freshly_planted,growing,ready};
-class entity;
-class plant:public entity
-{
+#ifndef PLANT_H
+#define PLANT_H
+
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include <string>
+
+class Plant {
 public:
-    void water();
-    plant(int x,int y);
-    virtual ~plant();
+    Plant(int x, int y, const std::string& textureFile);
+    virtual ~Plant();
+    void update(int dayCounter);
+    void draw(sf::RenderWindow& window);
+    bool isReadyForHarvest() const;
+    bool harvest();
+
 protected:
-    growth_stages current_stage;
-    bool watered;
-    int growth_start;
-    int growth_length;
-};
-class pickupable:public plant
-{
-public:
-    bool pickup();
-    pickupable(int x,int y);
-    virtual ~pickupable();
+    int x, y;
+    int currentDay;
+    int growthStage;
+    bool readyForHarvest;
+    std::vector<sf::Texture> textures;
+    sf::Sprite sprite;
+    void loadTextures(const std::string& textureFile);
 };
 
-class carrot:public pickupable
-{
+class Carrot : public Plant {
 public:
-    carrot(int x,int y);
-    ~carrot();
-};
-class potato:public pickupable
-{
-public:
-    potato(int x,int y);
-    ~potato();
+    Carrot(int x, int y);
+    ~Carrot();
 };
 
-class cutable:public plant
-{
+class Potato : public Plant {
 public:
-    cutable(int x,int y);
-    virtual~cutable();
-};
-class wheat
-{
-public:
-    wheat(/* args */);
-    ~wheat();
+    Potato(int x, int y);
+    ~Potato();
 };
 
-
-
-#endif
+#endif // PLANT_H
