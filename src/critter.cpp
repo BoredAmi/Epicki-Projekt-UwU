@@ -2,7 +2,7 @@
 
 // critter functions
 
-critter::critter(int x, int y, int hp, const std::vector<std::string>& textureFiles)
+critter::critter(int x, int y, int hp, const std::initializer_list<std::string>& textureFiles)
     : entity(x, y, hp), currentTextureIndex(0) {
     for (const auto& file : textureFiles) {
         sf::Texture texture;
@@ -50,7 +50,7 @@ void critter::draw(sf::RenderWindow &window) {
 
 // harv_crit functions
 
-harv_crit::harv_crit(int x, int y, int hp, const std::vector<std::string>& textureFiles)
+harv_crit::harv_crit(int x, int y, int hp, const std::initializer_list<std::string>& textureFiles)
     : critter(x, y, hp, textureFiles), collected_today(false), harvest_count(0) {}
 
 harv_crit::~harv_crit() {}
@@ -72,17 +72,146 @@ void harv_crit::resetDailyState() {
     collected_today = false;
 }
 
-cow::cow(int x, int y) : harv_crit(x, y, 20, {"path/to/cow_texture1.png", "path/to/cow_texture2.png"}) {}
+cow::cow(int x, int y)
+    : harv_crit(x, y, 20, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/cow_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/cow_walk.png", 128,128); // Ustaw odpowiednią ścieżkę do pliku
+}
 
 cow::~cow() {}
 
-sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"path/to/sheep_texture1.png", "path/to/sheep_texture2.png"}) {}
+void cow::loadAnimation(const std::string& file, int frameWidth, int frameHeight) {
+    sf::Texture texture;
+    if (!texture.loadFromFile(file)) {
+        std::cerr << "Error loading texture from file: " << file << std::endl;
+        return;  // Dodajemy return, aby uniknąć dalszego przetwarzania w przypadku błędu
+    }
+    textures.push_back(texture);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            animationFrames.emplace_back(j * frameWidth, i * frameHeight, frameWidth, frameHeight);
+        }
+    }
+    sprite.setTexture(textures[0]);
+    sprite.setTextureRect(animationFrames[0]);
+}
+
+void cow::updateAnimation() {
+    if (animationClock.getElapsedTime().asSeconds() > 0.1f) {
+        currentFrame = (currentFrame + 1) % 4 + direction * 4;
+        sprite.setTextureRect(animationFrames[currentFrame]);
+        animationClock.restart();
+    }
+}
+
+void cow::move(float offsetX, float offsetY) {
+    sprite.move(offsetX, offsetY);
+    updateAnimation();
+}
+
+void cow::randomMove(float deltaTime) {
+    float speed = 100.0f; // Example speed
+    if (moveTime <= 0) {
+        direction = std::rand() % 4;
+        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
+        moveTime = moveDuration;
+    }
+
+    float moveX = 0, moveY = 0;
+
+    switch (direction) {
+    case 0: moveX = speed * deltaTime; break; // Move right
+    case 1: moveX = -speed * deltaTime; break; // Move left
+    case 2: moveY = speed * deltaTime; break; // Move down
+    case 3: moveY = -speed * deltaTime; break; // Move up
+    }
+
+    sf::Vector2f position = sprite.getPosition();
+
+    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
+        moveX = -moveX; // Reverse direction if hitting the left or right edge
+        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
+    }
+    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
+        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
+        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
+    }
+
+    move(moveX, moveY);
+
+    moveTime -= deltaTime;
+}
+
+sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/sheep_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/sheep_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
+}
 
 sheep::~sheep() {}
 
+void sheep::loadAnimation(const std::string& file, int frameWidth, int frameHeight) {
+    sf::Texture texture;
+    if (!texture.loadFromFile(file)) {
+        std::cerr << "Error loading texture from file: " << file << std::endl;
+        return;  // Dodajemy return, aby uniknąć dalszego przetwarzania w przypadku błędu
+    }
+    textures.push_back(texture);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            animationFrames.emplace_back(j * frameWidth, i * frameHeight, frameWidth, frameHeight);
+        }
+    }
+    sprite.setTexture(textures[0]);
+    sprite.setTextureRect(animationFrames[0]);
+}
+
+void sheep::updateAnimation() {
+    if (animationClock.getElapsedTime().asSeconds() > 0.1f) {
+        currentFrame = (currentFrame + 1) % 4 + direction * 4;
+        sprite.setTextureRect(animationFrames[currentFrame]);
+        animationClock.restart();
+    }
+}
+
+void sheep::move(float offsetX, float offsetY) {
+    sprite.move(offsetX, offsetY);
+    updateAnimation();
+}
+
+void sheep::randomMove(float deltaTime) {
+    float speed = 100.0f; // Example speed
+    if (moveTime <= 0) {
+        direction = std::rand() % 4;
+        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
+        moveTime = moveDuration;
+    }
+
+    float moveX = 0, moveY = 0;
+
+    switch (direction) {
+    case 0: moveX = speed * deltaTime; break; // Move right
+    case 1: moveX = -speed * deltaTime; break; // Move left
+    case 2: moveY = speed * deltaTime; break; // Move down
+    case 3: moveY = -speed * deltaTime; break; // Move up
+    }
+
+    sf::Vector2f position = sprite.getPosition();
+
+    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
+        moveX = -moveX; // Reverse direction if hitting the left or right edge
+        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
+    }
+    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
+        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
+        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
+    }
+
+    move(moveX, moveY);
+
+    moveTime -= deltaTime;
+}
+
 // non_harv_crit functions
 
-non_harv_crit::non_harv_crit(int x, int y, int hp, const std::vector<std::string>& textureFiles)  // Poprawiona definicja
+non_harv_crit::non_harv_crit(int x, int y, int hp, const std::initializer_list<std::string>& textureFiles)
     : critter(x, y, hp, textureFiles), collected_today(false), harvest_count(0) {}
 
 non_harv_crit::~non_harv_crit() {}
@@ -105,8 +234,8 @@ void non_harv_crit::resetDailyState() {
 }
 
 chicken::chicken(int x, int y)
-    : non_harv_crit(x, y, 15, {"nienazwane2/grafika_zwierzeta/chicken_walk.png"}), currentFrame(0) {
-    loadAnimation("nienazwane2/grafika_zwierzeta/chicken_walk.png", 32, 32);
+    : non_harv_crit(x, y, 15, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/chicken_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/chicken_walk.png", 32, 32); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 chicken::~chicken() {}
@@ -115,6 +244,7 @@ void chicken::loadAnimation(const std::string& file, int frameWidth, int frameHe
     sf::Texture texture;
     if (!texture.loadFromFile(file)) {
         std::cerr << "Error loading texture from file: " << file << std::endl;
+        return;  // Dodajemy return, aby uniknąć dalszego przetwarzania w przypadku błędu
     }
     textures.push_back(texture);
     for (int i = 0; i < 4; ++i) {
@@ -128,13 +258,114 @@ void chicken::loadAnimation(const std::string& file, int frameWidth, int frameHe
 
 void chicken::updateAnimation() {
     if (animationClock.getElapsedTime().asSeconds() > 0.1f) {
-        currentFrame = (currentFrame + 1) % animationFrames.size();
+        currentFrame = (currentFrame + 1) % 4 + direction * 4;
         sprite.setTextureRect(animationFrames[currentFrame]);
         animationClock.restart();
     }
 }
 
+void chicken::move(float offsetX, float offsetY) {
+    sprite.move(offsetX, offsetY);
+    updateAnimation();
+}
 
-pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"path/to/pig_texture1.png", "path/to/pig_texture2.png"}) {}
+void chicken::randomMove(float deltaTime) {
+    float speed = 100.0f; // Example speed
+    if (moveTime <= 0) {
+        direction = std::rand() % 4;
+        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
+        moveTime = moveDuration;
+    }
+
+    float moveX = 0, moveY = 0;
+
+    switch (direction) {
+    case 0: moveX = speed * deltaTime; break; // Move right
+    case 1: moveX = -speed * deltaTime; break; // Move left
+    case 2: moveY = speed * deltaTime; break; // Move down
+    case 3: moveY = -speed * deltaTime; break; // Move up
+    }
+
+    sf::Vector2f position = sprite.getPosition();
+
+    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
+        moveX = -moveX; // Reverse direction if hitting the left or right edge
+        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
+    }
+    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
+        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
+        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
+    }
+
+    move(moveX, moveY);
+
+    moveTime -= deltaTime;
+}
+
+pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/pig_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/pig_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
+}
 
 pig::~pig() {}
+
+void pig::loadAnimation(const std::string& file, int frameWidth, int frameHeight) {
+    sf::Texture texture;
+    if (!texture.loadFromFile(file)) {
+        std::cerr << "Error loading texture from file: " << file << std::endl;
+        return;  // Dodajemy return, aby uniknąć dalszego przetwarzania w przypadku błędu
+    }
+    textures.push_back(texture);
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            animationFrames.emplace_back(j * frameWidth, i * frameHeight, frameWidth, frameHeight);
+        }
+    }
+    sprite.setTexture(textures[0]);
+    sprite.setTextureRect(animationFrames[0]);
+}
+
+void pig::updateAnimation() {
+    if (animationClock.getElapsedTime().asSeconds() > 0.1f) {
+        currentFrame = (currentFrame + 1) % 4 + direction * 4;
+        sprite.setTextureRect(animationFrames[currentFrame]);
+        animationClock.restart();
+    }
+}
+
+void pig::move(float offsetX, float offsetY) {
+    sprite.move(offsetX, offsetY);
+    updateAnimation();
+}
+
+void pig::randomMove(float deltaTime) {
+    float speed = 100.0f; // Example speed
+    if (moveTime <= 0) {
+        direction = std::rand() % 4;
+        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
+        moveTime = moveDuration;
+    }
+
+    float moveX = 0, moveY = 0;
+
+    switch (direction) {
+    case 0: moveX = speed * deltaTime; break; // Move right
+    case 1: moveX = -speed * deltaTime; break; // Move left
+    case 2: moveY = speed * deltaTime; break; // Move down
+    case 3: moveY = -speed * deltaTime; break; // Move up
+    }
+
+    sf::Vector2f position = sprite.getPosition();
+
+    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
+        moveX = -moveX; // Reverse direction if hitting the left or right edge
+        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
+    }
+    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
+        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
+        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
+    }
+
+    move(moveX, moveY);
+
+    moveTime -= deltaTime;
+}
