@@ -36,6 +36,14 @@ bool Player::removeItem(int chosen_item)
     }
     return false;
 }
+int Player::getEnergy()
+{
+    return energy;
+}
+int Player::getHp()
+{
+    return hp;
+}
 Player::~Player() {
     for (auto item : items) {
         delete item;

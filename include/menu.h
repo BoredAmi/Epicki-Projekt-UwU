@@ -8,6 +8,7 @@
 
 class Menu {
 public:
+    bool isStartSelected();
     Menu(float width, float height);
     void draw(sf::RenderWindow& window);
     void moveUp();

@@ -1,14 +1,19 @@
 #include <SFML/Graphics.hpp>
 #include "world.h"
 #include "player.h"
+#include <SFML/Audio.hpp>
 
 const int WIDTH = 800;
 const int HEIGHT = 600;
 const int TILE_SIZE = 10;
 
 void drawMap(sf::RenderWindow& window, const std::vector<std::vector<tiles>>& world, const sf::View& camera);
+void hpBar(sf::RenderWindow& window, Player& player);
+void energyBar(sf::RenderWindow& window, Player& player);
+void saveToFile();
+void loadFromFile();
 
-int main() {
+int game_window(sf::Music& backgroundMusic, bool& isMuted) {
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Open World Game");
     window.setFramerateLimit(60);
 
@@ -37,6 +42,8 @@ int main() {
         window.clear();
         window.setView(camera);
         drawMap(window, world.grid, camera);
+        hpBar(window, player);
+        energyBar(window, player);
         window.display();
     }
 
@@ -65,7 +72,7 @@ void drawMap(sf::RenderWindow& window, const std::vector<std::vector<tiles>>& wo
                     tileShape.setFillColor(sf::Color::Green);
                     break;
                 case plowed:
-                    tileShape.setFillColor(sf::Color(139, 69, 19)); // Brown color
+                    tileShape.setFillColor(sf::Color(139, 69, 19));
                     break;
                 case water:
                     tileShape.setFillColor(sf::Color::Blue);
@@ -76,27 +83,27 @@ void drawMap(sf::RenderWindow& window, const std::vector<std::vector<tiles>>& wo
         }
     }
 }
+
 void hpBar(sf::RenderWindow& window, Player& player) {
-    //draw hp bar
     sf::RectangleShape hpBar;
     hpBar.setSize(sf::Vector2f(player.getHp(), 10));
     hpBar.setFillColor(sf::Color::Red);
     hpBar.setPosition(10, 10);
     window.draw(hpBar);
 }
+
 void energyBar(sf::RenderWindow& window, Player& player) {
-    //draw energy bar
     sf::RectangleShape energyBar;
     energyBar.setSize(sf::Vector2f(player.getEnergy(), 10));
     energyBar.setFillColor(sf::Color::Yellow);
     energyBar.setPosition(10, 30);
     window.draw(energyBar);
 }
+
 void saveToFile() {
-    //save all data to a file
-
+    // Save all data to a file
 }
-void loadFromFile() {
-    //load all data from a file
 
+void loadFromFile() {
+    // Load all data from a file
 }

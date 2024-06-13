@@ -16,11 +16,12 @@ sheers::sheers(int id,int quant): tools(id,quant){}
 sheers::~sheers(){}
 bool sheers::cut_wool(sheep& she,Player& player)
 {
-    if(she.collected_today==false)
+    if(she.if_collected_today()==false)
     {
         wool* Wool=new wool(1,1);
         player.addItem(Wool);
         durability--;
+        she.set_collected_today(true);
         return true;
     }
     else
@@ -32,11 +33,12 @@ bucket::bucket(int id,int quant):tools(id,quant){}
 bucket::~bucket(){}
 bool bucket::milk_cow(cow& muu,Player& player)
 {
-    if(muu.collected_today==false)
+    if(muu.if_collected_today()==false)
     {
         milk* Milk=new milk(0,1);
         player.addItem(Milk);
         quant--;
+        muu.set_collected_today(true);
         return true;
     }
     else

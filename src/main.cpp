@@ -1,9 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <windows.h>
 #include "menu.h"
-
+#include "world.h"
+#include "player.h"
 #include <SFML/Audio.hpp>
+
+// Forward declaration of the game_window function
+int game_window(sf::Music& backgroundMusic, bool& isMuted);
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Menu Gry");
@@ -11,25 +14,24 @@ int main() {
 
     Menu menu(window.getSize().x, window.getSize().y);
 
-    // Wczytaj teksturę tła
+    // Load background texture
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/8546617.jpg")) {
-        std::cerr<<"Nie można załadować pliku background.png";
+    if (!backgroundTexture.loadFromFile("../assets/8546617.jpg")) {
+        std::cerr << "Nie można załadować pliku background.png";
         return -1;
     }
-
-    // Utwórz sprite tła
     sf::Sprite backgroundSprite;
     backgroundSprite.setTexture(backgroundTexture);
     menu.setBackgroundTexture(backgroundTexture, window.getSize().x, window.getSize().y);
-    // Wczytaj muzykę
+
+    // Load background music
     sf::Music backgroundMusic;
-    if (!backgroundMusic.openFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/In the Forest - Ambient Acoustic Guitar Instrumental BAckground Music.ogg")) {
-        std::cerr<<"Nie można załadować pliku background.ogg";
+    if (!backgroundMusic.openFromFile("../assets/In the Forest - Ambient Acoustic Guitar Instrumental BAckground Music.ogg")) {
+        std::cerr << "Nie można załadować pliku background.ogg";
         return -1;
     }
-    backgroundMusic.setLoop(true); // Muzyka będzie odtwarzana w pętli
-    backgroundMusic.play(); // Rozpocznij odtwarzanie muzyki
+    backgroundMusic.setLoop(true);
+    backgroundMusic.play();
 
     bool isMuted = false;
 
@@ -47,12 +49,15 @@ int main() {
                     menu.moveDown();
                 }
                 if (event.key.code == sf::Keyboard::Return) {
-                    menu.select(backgroundMusic); // Wywołanie metody select() po naciśnięciu Enter
+                    if (menu.isStartSelected()) {
+                        window.close();  // Close the menu window
+                        return game_window(backgroundMusic, isMuted);  // Start the game
+                    }
+                    menu.select(backgroundMusic);
                 }
                 if (event.key.code == sf::Keyboard::BackSpace) {
-                    menu.back(); // Wywołanie metody back() po naciśnięciu Backspace
+                    menu.back();
                 }
-
             }
 
             if (event.type == sf::Event::MouseButtonPressed) {
@@ -65,16 +70,11 @@ int main() {
         }
 
         window.clear();
-       // Ustawienie aktualnej tekstury tła
-        window.draw(backgroundSprite); // Rysowanie tła
-        menu.draw(window);            // Rysowanie menu
+        window.draw(backgroundSprite);
+        menu.draw(window);
         window.display();
     }
 
-
-
     return 0;
-
-
 }
 

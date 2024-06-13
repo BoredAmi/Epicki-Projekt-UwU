@@ -13,4 +13,4 @@ file(GLOB SOURCES "src/*.cpp")
 # Add executable
 add_executable(giera ${SOURCES})
 # Link SFML
-target_link_libraries(giera sfml-system sfml-window sfml-graphics)
+target_link_libraries(giera sfml-system sfml-window sfml-graphics sfml-audio sfml-network)

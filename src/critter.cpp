@@ -71,10 +71,17 @@ int harv_crit::getHarvestCount() const {
 void harv_crit::resetDailyState() {
     collected_today = false;
 }
-
+bool harv_crit::if_collected_today()
+{
+    return collected_today;
+}
+void harv_crit::set_collected_today(bool a)
+{
+    collected_today=a;
+}
 cow::cow(int x, int y)
-    : harv_crit(x, y, 20, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/cow_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
-    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/cow_walk.png", 128,128); // Ustaw odpowiednią ścieżkę do pliku
+    : harv_crit(x, y, 20, {"../assets/grafika_zwierzeta/cow_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("../assets/grafika_zwierzeta/cow_walk.png", 128,128); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 cow::~cow() {}
@@ -141,8 +148,8 @@ void cow::randomMove(float deltaTime) {
     moveTime -= deltaTime;
 }
 
-sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/sheep_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
-    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/sheep_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
+sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/sheep_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("../assets/grafika_zwierzeta/sheep_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 sheep::~sheep() {}
@@ -234,8 +241,8 @@ void non_harv_crit::resetDailyState() {
 }
 
 chicken::chicken(int x, int y)
-    : non_harv_crit(x, y, 15, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/chicken_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
-    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/chicken_walk.png", 32, 32); // Ustaw odpowiednią ścieżkę do pliku
+    : non_harv_crit(x, y, 15, {"../assets/grafika_zwierzeta/chicken_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("../assets/grafika_zwierzeta/chicken_walk.png", 32, 32); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 chicken::~chicken() {}
@@ -302,8 +309,8 @@ void chicken::randomMove(float deltaTime) {
     moveTime -= deltaTime;
 }
 
-pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/pig_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
-    loadAnimation("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/grafika_zwierzeta/pig_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
+pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/pig_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    loadAnimation("../assets/grafika_zwierzeta/pig_walk.png", 128, 128); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 pig::~pig() {}

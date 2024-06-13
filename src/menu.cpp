@@ -1,9 +1,11 @@
-#include "Menu.h"
+#include "menu.h"
 #include <iostream>
 #include <SFML/Audio.hpp>
-
+bool Menu::isStartSelected() {
+    return (state == 0 && selectedItemIndex == 0);
+}
 Menu::Menu(float width, float height) : state(0) {
-    if (!font.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/Jacquard_12/Jacquard12-Regular.ttf")) {
+    if (!font.loadFromFile("../assets/Jacquard12-Regular.ttf")) {
         std::cerr << "Nie można załadować czcionki" << std::endl;
     }
 
@@ -112,10 +114,10 @@ Menu::Menu(float width, float height) : state(0) {
     muteButton.setSize(sf::Vector2f(50, 50));
     muteButton.setPosition(10, 10);
 
-    if (!muteTextureOn.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/glosnik2.png")) {
+    if (!muteTextureOn.loadFromFile("../assets/glosnik2.png")) {
         std::cerr << "Nie można załadować pliku sound_on.png" << std::endl;
     }
-    if (!muteTextureOff.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/glosnik.png")) {
+    if (!muteTextureOff.loadFromFile("../assets/glosnik.png")) {
         std::cerr << "Nie można załadować pliku sound_off.png" << std::endl;
     }
 
@@ -126,7 +128,7 @@ Menu::Menu(float width, float height) : state(0) {
 }
 
 void Menu::draw(sf::RenderWindow& window) {
-     window.draw(muteSprite);
+    window.draw(muteSprite);
     if (state == 0) { // Główne menu
 
         for (int i = 0; i < 3; ++i) {
@@ -165,6 +167,7 @@ void Menu::draw(sf::RenderWindow& window) {
             window.draw(resolutionBackgrounds[i]);
             window.draw(resolutions[i]);
         }
+    }
     } else if (state == 3) { // Menu controls
 
         for (int i = 0; i < 3; ++i) {
@@ -293,15 +296,15 @@ void Menu::select(sf::Music& backgroundMusic) {
     } else if (state == 3) {
 
         if (selectedItemIndex == 0) {
-            if (newBackgroundTexture.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/images.jpg")) {
+            if (newBackgroundTexture.loadFromFile("../assets/images.jpg")) {
                 setBackgroundTexture(newBackgroundTexture, 800, 600); // Dodaj szerokość i wysokość okna
             }
         } else if (selectedItemIndex == 1) {
-            if (newBackgroundTexture.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/istockphoto-1047558154-612x612.jpg")) {
+            if (newBackgroundTexture.loadFromFile("../assets/istockphoto-1047558154-612x612.jpg")) {
                 setBackgroundTexture(newBackgroundTexture, 800, 600); // Dodaj szerokość i wysokość okna
             }
         } else if (selectedItemIndex == 2) {
-            if (newBackgroundTexture.loadFromFile("C:/Users/pwsmi/OneDrive/Pulpit/nienazwane2/istockphoto-1317288349-612x612.jpg")) {
+            if (newBackgroundTexture.loadFromFile("../assets/istockphoto-1317288349-612x612.jpg")) {
                 setBackgroundTexture(newBackgroundTexture, 800, 600); // Dodaj szerokość i wysokość okna
             }
         }

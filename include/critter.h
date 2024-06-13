@@ -32,6 +32,10 @@ public:
     int getHarvestCount() const;
     void resetDailyState();
 
+    bool if_collected_today();
+
+    void set_collected_today(bool a);
+
 protected:
     bool collected_today;
     int harvest_count;
@@ -79,11 +83,11 @@ class non_harv_crit : public critter {
 public:
     non_harv_crit(int x, int y, int hp, const std::initializer_list<std::string>& textureFiles);
     virtual ~non_harv_crit();
-
     bool harvest();
     int getHarvestCount() const;
     void resetDailyState();
-
+    bool if_collected_today();
+    void set_collected_today(bool state);
 protected:
     bool collected_today;
     int harvest_count;
