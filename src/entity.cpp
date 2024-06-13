@@ -12,5 +12,5 @@ void entity::setPosition(int x, int y) {
     this->x = x;
     this->y = y;
 }
-entity::entity(int x, int y,int hp):x(x),y(y),hp(hp){}
+//entity::entity(int x, int y,int hp):x(x),y(y),hp(hp){}
 entity::~entity(){}
