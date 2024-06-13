@@ -7,7 +7,7 @@ class SimplexNoise {
 private:
     std::vector<int> p;
     std::vector<int> permutation;
-
+    
     double fade(double t);
     double lerp(double t, double a, double b);
     double grad(int hash, double x, double y);

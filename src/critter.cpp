@@ -23,14 +23,14 @@ void critter::move(int worldWidth, int worldHeight) {
     int direction = std::rand() % 4;
     int newX = x;
     int newY = y;
-
+    if (worldWidth > 0 && worldHeight > 0) {
     switch (direction) {
     case 0: newX = (x + 1) % worldWidth; break;
     case 1: newX = (x - 1 + worldWidth) % worldWidth; break;
     case 2: newY = (y + 1) % worldHeight; break;
     case 3: newY = (y - 1 + worldHeight) % worldHeight; break;
     }
-
+    }
     x = newX;
     y = newY;
     sprite.setPosition(static_cast<float>(x), static_cast<float>(y));
@@ -79,12 +79,15 @@ void harv_crit::set_collected_today(bool a)
 {
     collected_today=a;
 }
+
 cow::cow(int x, int y)
-    : harv_crit(x, y, 20, {"../assets/grafika_zwierzeta/cow_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    : harv_crit(x, y, 20, {"../assets/grafika_zwierzeta/cow_walk.png"}) {
     loadAnimation("../assets/grafika_zwierzeta/cow_walk.png", 15,15); // Ustaw odpowiednią ścieżkę do pliku
 }
 
 cow::~cow() {}
+
+
 
 void cow::loadAnimation(const std::string& file, int frameWidth, int frameHeight) {
     sf::Texture texture;
@@ -115,7 +118,7 @@ void cow::move(float offsetX, float offsetY) {
     updateAnimation();
 }
 
-void cow::randomMove(float deltaTime) {
+void critter::randomMove(float deltaTime) {
     float speed = 100.0f; // Example speed
     if (moveTime <= 0) {
         direction = std::rand() % 4;
@@ -148,7 +151,7 @@ void cow::randomMove(float deltaTime) {
     moveTime -= deltaTime;
 }
 
-sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/sheep_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+sheep::sheep(int x, int y) : harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/sheep_walk.png"}) {
     loadAnimation("../assets/grafika_zwierzeta/sheep_walk.png", 15, 15); // Ustaw odpowiednią ścieżkę do pliku
 }
 
@@ -183,38 +186,6 @@ void sheep::move(float offsetX, float offsetY) {
     updateAnimation();
 }
 
-void sheep::randomMove(float deltaTime) {
-    float speed = 100.0f; // Example speed
-    if (moveTime <= 0) {
-        direction = std::rand() % 4;
-        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
-        moveTime = moveDuration;
-    }
-
-    float moveX = 0, moveY = 0;
-
-    switch (direction) {
-    case 0: moveX = speed * deltaTime; break; // Move right
-    case 1: moveX = -speed * deltaTime; break; // Move left
-    case 2: moveY = speed * deltaTime; break; // Move down
-    case 3: moveY = -speed * deltaTime; break; // Move up
-    }
-
-    sf::Vector2f position = sprite.getPosition();
-
-    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
-        moveX = -moveX; // Reverse direction if hitting the left or right edge
-        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
-    }
-    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
-        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
-        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
-    }
-
-    move(moveX, moveY);
-
-    moveTime -= deltaTime;
-}
 
 // non_harv_crit functions
 
@@ -241,7 +212,7 @@ void non_harv_crit::resetDailyState() {
 }
 
 chicken::chicken(int x, int y)
-    : non_harv_crit(x, y, 15, {"../assets/grafika_zwierzeta/chicken_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+    : non_harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/chicken_walk.png"}) {
     loadAnimation("../assets/grafika_zwierzeta/chicken_walk.png", 18, 18); // Ustaw odpowiednią ścieżkę do pliku
 }
 
@@ -276,40 +247,11 @@ void chicken::move(float offsetX, float offsetY) {
     updateAnimation();
 }
 
-void chicken::randomMove(float deltaTime) {
-    float speed = 100.0f; // Example speed
-    if (moveTime <= 0) {
-        direction = std::rand() % 4;
-        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
-        moveTime = moveDuration;
-    }
 
-    float moveX = 0, moveY = 0;
 
-    switch (direction) {
-    case 0: moveX = speed * deltaTime; break; // Move right
-    case 1: moveX = -speed * deltaTime; break; // Move left
-    case 2: moveY = speed * deltaTime; break; // Move down
-    case 3: moveY = -speed * deltaTime; break; // Move up
-    }
 
-    sf::Vector2f position = sprite.getPosition();
 
-    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
-        moveX = -moveX; // Reverse direction if hitting the left or right edge
-        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
-    }
-    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
-        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
-        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
-    }
-
-    move(moveX, moveY);
-
-    moveTime -= deltaTime;
-}
-
-pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/pig_walk.png"}), currentFrame(0), direction(0), moveDuration(0), moveTime(0) {
+pig::pig(int x, int y) : non_harv_crit(x, y, 25, {"../assets/grafika_zwierzeta/pig_walk.png"}) {
     loadAnimation("../assets/grafika_zwierzeta/pig_walk.png", 15, 15); // Ustaw odpowiednią ścieżkę do pliku
 }
 
@@ -344,35 +286,3 @@ void pig::move(float offsetX, float offsetY) {
     updateAnimation();
 }
 
-void pig::randomMove(float deltaTime) {
-    float speed = 100.0f; // Example speed
-    if (moveTime <= 0) {
-        direction = std::rand() % 4;
-        moveDuration = (std::rand() % 3) + 1; // Move for 1 to 3 seconds
-        moveTime = moveDuration;
-    }
-
-    float moveX = 0, moveY = 0;
-
-    switch (direction) {
-    case 0: moveX = speed * deltaTime; break; // Move right
-    case 1: moveX = -speed * deltaTime; break; // Move left
-    case 2: moveY = speed * deltaTime; break; // Move down
-    case 3: moveY = -speed * deltaTime; break; // Move up
-    }
-
-    sf::Vector2f position = sprite.getPosition();
-
-    if (position.x + moveX < 0 || position.x + moveX > 800 - sprite.getGlobalBounds().width) {
-        moveX = -moveX; // Reverse direction if hitting the left or right edge
-        direction = (direction == 0) ? 1 : (direction == 1) ? 0 : direction;
-    }
-    if (position.y + moveY < 0 || position.y + moveY > 600 - sprite.getGlobalBounds().height) {
-        moveY = -moveY; // Reverse direction if hitting the top or bottom edge
-        direction = (direction == 2) ? 3 : (direction == 3) ? 2 : direction;
-    }
-
-    move(moveX, moveY);
-
-    moveTime -= deltaTime;
-}

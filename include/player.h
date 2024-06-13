@@ -17,9 +17,10 @@ public:
     
     void move(float dx, float dy);
     ~Player();
-
+sf::Sprite sprite;
 protected:
     direction dir;
+    
     std::vector<item*> items;
     int chosen_item;
     int max_capacity;    

@@ -1,5 +1,17 @@
 #include "player.h"
-Player::Player(float startX, float startY, float moveSpeed) : position(startX, startY), speed(moveSpeed) {}
+Player::Player(float startX, float startY, float moveSpeed) : position(startX, startY), speed(moveSpeed) {
+    hp = 100;
+    energy = 100;
+    max_capacity = 10;
+    chosen_item = 0;
+    sf::Texture texture; // Declare the texture variable
+    //load player sprite
+    if (!texture.loadFromFile("../assets/player.png")) {
+        throw std::runtime_error("Cannot load player texture");
+    }
+    sprite.setTexture(texture);
+    sprite.setPosition(position);
+}
 
 void Player::move(float dx, float dy) {
     position.x += dx * speed;
