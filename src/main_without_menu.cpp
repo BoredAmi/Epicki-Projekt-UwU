@@ -76,4 +76,27 @@ void drawMap(sf::RenderWindow& window, const std::vector<std::vector<tiles>>& wo
         }
     }
 }
-//save all data to a file
+void hpBar(sf::RenderWindow& window, Player& player) {
+    //draw hp bar
+    sf::RectangleShape hpBar;
+    hpBar.setSize(sf::Vector2f(player.getHp(), 10));
+    hpBar.setFillColor(sf::Color::Red);
+    hpBar.setPosition(10, 10);
+    window.draw(hpBar);
+}
+void energyBar(sf::RenderWindow& window, Player& player) {
+    //draw energy bar
+    sf::RectangleShape energyBar;
+    energyBar.setSize(sf::Vector2f(player.getEnergy(), 10));
+    energyBar.setFillColor(sf::Color::Yellow);
+    energyBar.setPosition(10, 30);
+    window.draw(energyBar);
+}
+void saveToFile() {
+    //save all data to a file
+
+}
+void loadFromFile() {
+    //load all data from a file
+
+}
